@@ -1,0 +1,56 @@
+import {
+RECEIVE_ADDRESS,
+RECEIVE_FOODKINDS,
+RECEIVE_SHOPS,
+RECEIVE_USER,
+CLEAR_USER,
+RECEIVE_SHOPINFO,
+RECEIVE_SHOPRATING,
+RECEIVE_SHOPGOODS,
+INCREMENT_FOODCOUNT,
+DECREMENT_FOODCOUNT,
+CLEAR_SHOPCART,
+RECEIVE_SERACHSHOPS
+} from './mutations_types.js'
+
+export default {
+    [RECEIVE_ADDRESS](state,{address}){
+        state.address=address
+    },
+    [RECEIVE_FOODKINDS](state,{foodkinds}){
+        state.foodkinds=foodkinds
+    },
+    [RECEIVE_SHOPS](state,{shops}){
+        state.shops=shops
+    },
+    [RECEIVE_USER](state,{user}){
+        state.user=user
+    },
+    [CLEAR_USER](state){
+        state.user={}
+    },
+    [RECEIVE_SHOPINFO](state,{info}){
+        state.info=info
+    },
+    [RECEIVE_SHOPRATING](state,{rating}){
+        state.rating=rating
+    },
+    [RECEIVE_SHOPGOODS](state,{goods}){
+        state.goods=goods
+    },
+    [INCREMENT_FOODCOUNT](state,{food}){
+        food.count++
+    },
+    [DECREMENT_FOODCOUNT](state,{food}){
+        food.count--
+        if(food.count===0){
+            state.cartFoods.splice(state.cartFoods.indexOf(food),1)
+        }
+    },
+    [CLEAR_SHOPCART](state){
+        state.cartFoods=[]
+    },
+    [RECEIVE_SERACHSHOPS](state,{serachShops}){
+        state.serachShops=serachShops
+    }
+}

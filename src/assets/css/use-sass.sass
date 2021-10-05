@@ -1,0 +1,117 @@
+/* 导入文件是 .sass或者.scss会被合并进来，是.css则是引用
+ @import url('common/css/reset.css'); */
+$vw_base: 375; 
+$pink: pink !default;
+$pink: blue; //下面的层级高
+@function vw($px) {
+    @return ($px / 375) * 100vw;
+}
+.center-left{
+    width:vw(375/2);
+    background: $pink;
+    $color: red;
+    color: $color;
+}
+.flex{
+    display:flex;
+    width: vw(50);
+    // 子选择器嵌套
+    .red{
+        color: $pink;
+    }
+    // 属性嵌套
+    border: {
+        top: 5px solid green;
+        bottom: 5px solid orange
+    }
+    // & 伪类嵌套 .flex:after{}
+    &:after{
+      content: ".";
+      display: block;
+      height: 0;
+      clear: both;
+      visibility: hidden;
+    }
+}
+// 属性继承@extend
+.btn {
+    border: 1px solid $pink; 
+    padding: 6px 10px;
+}
+.btn-primary { 
+    background-color: #f36;
+    @extend .btn;
+}
+// 混合指令通过@mixin来定义，@include来调用(参数若是没有传时，可以使用默认值)
+@mixin div-border ($direct: right, $color: red){
+    border-#{$direct}: 1px solid $color
+}
+.btn {
+    @include div-border(top, yellow);   //border-top:1px solid yellow
+    @include div-border()   //border-right:1px solid red
+}
+
+//占位符号 % color1并没有存在于基类，只是额外声明，不会产生代码，只有在@extend继承是才会编译成css
+%color1{
+    color: yellow
+}
+.color-tatal{
+    @extend %color1;
+}
+
+// sass中的数组用空格或逗号作分隔符，length($color-arr)：返回一个列表的长度值3。以下循环只写其中一位
+// 关于加减乘除运算，单位要相同
+// 插值#{}: 变量替换
+$color-arr: red yellow, green;
+$color-map: (h1:16px, h2:32px, h3:64px);
+@each $color in $color-arr{ // .item-red{color:red}
+    @warn "输出： #{$color}";   //@error, @debug
+    .item-#{$color}{
+        color: $color;
+    }
+}  
+@each $key, $value in $color-map {  //h1{font-size:16px;color:red}
+    #{$key}{
+        font-size: $value
+    }
+    @if $key == h1 {
+        #{$key}{
+            color: red
+        }
+    }
+}
+@for $i from 0 through 3 {  //.item-1{font-size:12px}
+    @if $i != 0{
+        .item.#{$i} {
+            font-size: round($i* 12)/2; //四舍五入后除法运算
+        }
+    }
+}
+
+$types : 0;
+$type-width : "10"+"px";    // “+”将两个字符连接
+@while $types < 3 {     // while2{width:12px}
+    .while-#{$types} {
+        width : $type-width + $types;
+    }
+    $types : $types + 1;
+}
+// 函数
+.test1 {
+    content: unquote("'Hello Sass!'");  //删除函数前后单（双）引号 content:"Hello Sass"
+}
+.test2 {
+    content:quote('Hello') + "Sass" //将字符创转成双引号
+}
+.test3{
+    content: to-upper-case(aAa); //将字符串转大小，To-lower-case()小写
+}
+.test4{
+    width : precentage(20px / 200px);   //将一个不带单位的数转换成百分比值
+}
+.test5{
+    width: ceil(12.3)   //取整大于本身（13）; floor取整小于本身; abs返回一个数的绝对值
+}
+.test6{
+    width:random() *100px // 用来获取一个随机数
+}
